@@ -16,10 +16,15 @@ function! OmniSharp#GetHost(...) abort
     " successfully been registered with the server:
     " { 'sln_or_dir': '/path/to/solution_or_dir', 'initialized': 1 }
     let host = getbufvar(bufnr, 'OmniSharp_host', {})
-    if get(host, 'sln_or_dir', '') ==# ''
-      let host.sln_or_dir = OmniSharp#FindSolutionOrDir(1, bufnr)
+    let sln_or_dir = get(host, 'sln_or_dir', '')
+    if sln_or_dir ==# ''
+      let sln_or_dir = OmniSharp#FindSolutionOrDir(1, bufnr)
+      let host.sln_or_dir = get(g:csprojs2sln, sln_or_dir, sln_or_dir)
       let host.initialized = 0
       call setbufvar(bufnr, 'OmniSharp_host', host)
+    elseif isdirectory(sln_or_dir)
+      let sln_or_dir = OmniSharp#FindSolutionOrDir(1, bufnr)
+      let host.sln_or_dir = get(g:csprojs2sln, sln_or_dir, sln_or_dir)
     endif
     " The returned dict includes the job, but the job is _not_ part of
     " b:OmniSharp_host. It is important to always fetch the job from
@@ -298,6 +303,8 @@ function! OmniSharp#StartServer(...) abort
     endif
   endif
 
+  let sln_or_dir = has_key(g:csprojs2sln, sln_or_dir) ? g:csprojs2sln[sln_or_dir] : sln_or_dir
+
   " Optionally perform check if server is already running
   if check_is_running
     let job = OmniSharp#proc#GetJob(sln_or_dir)
@@ -361,7 +368,7 @@ function! OmniSharp#StopServer(...) abort
 endfunction
 
 function! OmniSharp#RestartServer() abort
-  let sln_or_dir = OmniSharp#FindSolutionOrDir()
+  let sln_or_dir = get(OmniSharp#GetHost(), 'sln_or_dir', '')
   if empty(sln_or_dir)
     call OmniSharp#util#EchoErr('Could not find solution file or directory')
     return

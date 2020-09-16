@@ -63,9 +63,9 @@ Any time `g:OmniSharp_server_stdio` is modified, the server needs to be re-insta
     * [coc.nvim](https://github.com/neoclide/coc.nvim)
     * [ncm2](https://github.com/ncm2/ncm2)
     * [deoplete](https://github.com/Shougo/deoplete.nvim)
-  * Completion snippets are supported. e.g. Console.WriteLine(TAB) (ENTER) will complete to Console.WriteLine(string value) and expand a dynamic snippet, this will place you in SELECT mode and the first method argument will be selected. 
+  * Completion snippets are supported. e.g. Console.WriteLine(TAB) (ENTER) will complete to Console.WriteLine(string value) and expand a dynamic snippet, this will place you in SELECT mode and the first method argument will be selected.
     * Requires [UltiSnips](https://github.com/SirVer/ultisnips) and supports standard C-x C-o completion as well as completion/autocompletion plugins such as [asyncomplete-vim](https://github.com/prabirshrestha/asyncomplete.vim), [Supertab](https://github.com/ervandew/supertab), [Neocomplete](https://github.com/Shougo/neocomplete.vim) etc.
-    * Requires `set completeopt-=preview` when using [Neocomplete](https://github.com/Shougo/neocomplete.vim) because of a compatibility issue with [UltiSnips](https://github.com/SirVer/ultisnips). 
+    * Requires `set completeopt-=preview` when using [Neocomplete](https://github.com/Shougo/neocomplete.vim) because of a compatibility issue with [UltiSnips](https://github.com/SirVer/ultisnips).
 
 * Jump to the definition of a type/variable/method
 * Find symbols interactively (uses selector plugin by default: [fzf](https://github.com/junegunn/fzf), [vim-clap](https://github.com/liuchengxu/vim-clap), [CtrlP](https://github.com/ctrlpvim/ctrlp.vim) or [unite.vim](https://github.com/Shougo/unite.vim))

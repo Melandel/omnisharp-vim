@@ -15,7 +15,7 @@ augroup OmniSharp_FileType
 augroup END
 
 setlocal omnifunc=OmniSharp#Complete
-
+call Melandel#BuildCsprojsToSlnDictionary(OmniSharp#FindSolutionOrDir())
 if get(g:, 'OmniSharp_start_server', 0)
   call OmniSharp#StartServerIfNotRunning()
 endif
