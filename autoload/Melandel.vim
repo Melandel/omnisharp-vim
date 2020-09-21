@@ -8,7 +8,7 @@ function! Melandel#GetCsprojsFromSlnFile(sln_or_dir)
 	let csprojLines = filter(lineList, { _,x -> stridx(x, '.csproj') >= 0})
 	let csprojFolders = map(csprojLines, {_,x -> fnamemodify(sln_folder . '\' . matchlist(x, '\v"((\a|\.|\:|\\|\/|\d|_|-)*\.csproj)"')[1], ':p:h')})
 	return reverse(sort(reverse(csprojFolders)))
-endfunction	
+endfunction
 
 function! Melandel#BuildCsprojsToSlnDictionary(sln_or_dir)
 	if !exists('g:csprojs2sln')
