@@ -56,16 +56,30 @@ function! OmniSharp#actions#complete#ExpandSnippet()
 
     if has_key(s:last_completion_dictionary, completion)
       let snippet = get(get(s:last_completion_dictionary, completion, ''), 'snip','')
-      if !has_key(s:generated_snippets, completion)
-        call UltiSnips#AddSnippetWithPriority(completion, snippet, completion, 'iw', 'cs', 1)
-        let s:generated_snippets[completion] = snippet
+      if s:GetNextCharacter() == '('
+        call OmniSharp#stdio#Request(
+              \'/v2/highlight',
+              \{
+              \'ResponseHandler': function('Melandel#ParseArgumentsAndAdaptSnippet', [completion, snippet, s:generated_snippets]),
+              \'Parameters':      {'Range': {'Start': {'Line':line('.'), 'Column':col('.')}, 'End': {'Line':line('$'), 'Column':col('$') } }},
+              \'ReplayOnLoad':    1
+              \}
+              \)
+      else
+        if !has_key(s:generated_snippets, completion)
+          call UltiSnips#AddSnippetWithPriority(completion, snippet, completion, 'iw', 'cs', 1)
+          let s:generated_snippets[completion] = snippet
+        endif
+        call UltiSnips#CursorMoved()
+        call UltiSnips#ExpandSnippetOrJump()
       endif
-      call UltiSnips#CursorMoved()
-      call UltiSnips#ExpandSnippetOrJump()
     endif
   endif
 endfunction
 
+function! s:GetNextCharacter()
+  return strcharpart(getline('.')[col('.')-1:], 0, 1)
+endfunction
 
 function! s:StdioGetCompletions(partial, Callback) abort
   let wantDocPopup = OmniSharp#popup#Enabled()
